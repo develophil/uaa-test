@@ -14,8 +14,10 @@ node {
         sh "./gradlew clean --no-daemon"
     }
     
-    stage('packaging') {
-        sh "./gradlew bootRepackage -x test -Pprod -PnodeInstall --no-daemon"
-        archiveArtifacts artifacts: '**/build/libs/*.war', fingerprint: true
+    stage('quality analysis') {
+        withSonarQubeEnv('Sonar') {
+            sh "./gradlew sonarqube --no-daemon"
+        }
     }
+    
 }
